@@ -1,9 +1,8 @@
 package com.example.myapplication;
 
-import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.FragmentActivity;
-
 import android.Manifest;
+import android.animation.ObjectAnimator;
+import android.animation.TypeEvaluator;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Criteria;
@@ -11,23 +10,24 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 
-import com.google.android.gms.location.LocationResult;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap; //지도 데이터 및 뷰에 대한 액세스 권한 제공
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment; //앱 UI의 상위 요소
-import com.google.android.gms.maps.model.BitmapDescriptor; //마커의 모양
-import com.google.android.gms.maps.model.BitmapDescriptorFactory; //마커의 모양
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.example.myapplication.databinding.ActivityMapsBinding;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.FragmentActivity;
 
+import com.example.myapplication.databinding.ActivityMapsBinding;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
@@ -85,8 +85,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         markerOptions.icon(markerIcon);
                         currentMarker = mMap.addMarker(markerOptions);
                     }
-                    else
+                    else{
+                        // marker의 위치를 자연스럽게 이동하기 위해 Animator 사용
+                        ObjectAnimator animator = ObjectAnimator.ofObject(currentMarker, "position", new LatLngEvaluator(), currentMarker.getPosition(), currentLocation);
+                        animator.setDuration(1000); // 애니메이션의 지속 시간을 1초 설정
+                        animator.start(); // 애니메이션
                         currentMarker.setPosition(currentLocation);
+                    }
+
                 }
             }
         };
@@ -97,6 +103,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
     }
+    public class LatLngEvaluator implements TypeEvaluator<LatLng> {
+        @Override
+        public LatLng evaluate(float fraction, LatLng startValue, LatLng endValue) {
+            double lat = (endValue.latitude - startValue.latitude) * fraction + startValue.latitude;
+            double lng = (endValue.longitude - startValue.longitude) * fraction + startValue.longitude;
+            return new LatLng(lat, lng);
+        }
+    }
+
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
