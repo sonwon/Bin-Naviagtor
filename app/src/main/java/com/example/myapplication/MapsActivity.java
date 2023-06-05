@@ -4,6 +4,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
+import android.animation.ObjectAnimator;
+import android.animation.TypeEvaluator;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Criteria;
@@ -85,8 +87,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         markerOptions.icon(markerIcon);
                         currentMarker = mMap.addMarker(markerOptions);
                     }
-                    else
+                    else{
+                        // marker의 위치를 자연스럽게 이동하기 위해 Animator 사용
+                        ObjectAnimator animator = ObjectAnimator.ofObject(currentMarker, "position", new LatLngEvaluator(), currentMarker.getPosition(), currentLocation);
+                        animator.setDuration(1000); // 애니메이션의 지속 시간을 1초 설정
+                        animator.start(); // 애니메이션
                         currentMarker.setPosition(currentLocation);
+                    }
+
                 }
             }
         };
@@ -97,6 +105,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
     }
+    public class LatLngEvaluator implements TypeEvaluator<LatLng> {
+        @Override
+        public LatLng evaluate(float fraction, LatLng startValue, LatLng endValue) {
+            double lat = (endValue.latitude - startValue.latitude) * fraction + startValue.latitude;
+            double lng = (endValue.longitude - startValue.longitude) * fraction + startValue.longitude;
+            return new LatLng(lat, lng);
+        }
+    }
+
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
