@@ -12,6 +12,8 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
@@ -45,8 +47,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private MarkerOptions markerOptions;
     private Marker currentMarker;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,7 +99,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         };
 
-
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -143,11 +142,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             return;
         }
         fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null);
@@ -166,5 +160,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void stopLocationUpdates() {
         currentMarker.remove();
         fusedLocationClient.removeLocationUpdates(locationCallback);
+    }
+
+
+    //버튼 입력에 대한 반응
+    public void button1Activity(View view) {
+        //버튼 1 입력시 반응
+        Toast.makeText(this,"버튼1 입력",Toast.LENGTH_SHORT).show();
+    }
+
+    public void button2Activity(View view) {
+        //버튼 2 입력시 반응
+        Toast.makeText(this,"버튼2 입력",Toast.LENGTH_SHORT).show();
     }
 }
