@@ -1,12 +1,15 @@
 package com.example.myapplication;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
 import android.animation.ObjectAnimator;
 import android.animation.TypeEvaluator;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.Location;
@@ -50,6 +53,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Marker currentMarker;
 
     private Marker[] binMarkers = new Marker[99999];
+    int markerCount = 0;
 
     private boolean addMark = false;
     @Override
@@ -90,6 +94,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         markerOptions.position(currentLocation);
                         markerOptions.icon(markerIcon);
                         currentMarker = mMap.addMarker(markerOptions);
+                        currentMarker.setTag("location");
                     }
                     else{
                         // marker의 위치를 자연스럽게 이동하기 위해 Animator 사용
@@ -156,9 +161,28 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 mOptions.position(new LatLng(latitude, longtitude));
                 // 마커 추가
                 if(addMark) { //등록 버튼을 누르면 addMark가 true가 되어서 등록 가능해진다.
-                    googleMap.addMarker(mOptions);
+                    binMarkers[markerCount] = mMap.addMarker(mOptions);
+                    binMarkers[markerCount].setTag("binMarker");
+                    markerCount++;
                     addMark = false;
                 }
+            }
+        });
+
+        //마커 클릭시 정보표시
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                Toast.makeText(MapsActivity.this, "marker click", Toast.LENGTH_SHORT).show(); //debug용
+                String str = (String) marker.getTag();
+                switch(str) {
+                    case "location":
+                        break;
+                    case "binMarker":
+                        markerClick(marker);
+                        break;
+                }
+                return false;
             }
         });
 
@@ -166,7 +190,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LatLng bin1 = new LatLng(36.3663, 127.3451);
         LatLng bin2 = new LatLng(36.3661, 127.3455);
         binMarkers[0] = mMap.addMarker(new MarkerOptions().position(bin1).title("Marker1 in 공5"));
+        binMarkers[0].setTag("binMarker");
+        markerCount++;
         binMarkers[1] = mMap.addMarker(new MarkerOptions().position(bin2).title("Marker2 in 공5"));
+        binMarkers[1].setTag("binMarker");
+        markerCount++;
         //mMap.moveCamera(CameraUpdateFactory.newLatLng(bin)); 카메라 이동
 
 
@@ -235,5 +263,27 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //binMarker 삭제
         binMarkers[1].remove();
 
+    }
+
+    public void markerClick(Marker marker) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MapsActivity.this);
+        builder.setTitle("쓰레기통")
+                .setMessage(marker.getTitle()) // 원하는 추가 정보를 여기에 추가
+                .setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // 취소 버튼 클릭 이벤트 처리
+                        dialog.dismiss();
+                    }
+                })
+                .setNeutralButton("버튼", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // 버튼 입력시 이벤트
+                        Toast.makeText(MapsActivity.this,"버튼 입력",Toast.LENGTH_SHORT).show();
+                    }
+                })
+        ;
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }
