@@ -2,6 +2,7 @@ package com.example.myapplication;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
@@ -39,8 +40,6 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
-
-
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
@@ -59,6 +58,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     int markerCount = 0;
 
     private boolean addMark = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -164,10 +164,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 mOptions.position(new LatLng(latitude, longtitude));
                 // 마커 추가
                 if(addMark) { //등록 버튼을 누르면 addMark가 true가 되어서 등록 가능해진다.
-                    binMarkers[markerCount] = mMap.addMarker(mOptions);
-                    binMarkers[markerCount].setTag("binMarker");
-                    markerCount++;
-                    addMark = false;
+                    AlertDialog.Builder dlg = new AlertDialog.Builder(MapsActivity.this);
+                    dlg.setTitle("확인 메시지");
+                    dlg.setMessage("추가 하시겠습니까?");
+                    dlg.setPositiveButton("확인", new DialogInterface.OnClickListener(){
+                        public void onClick(DialogInterface dialog, int which){
+                            binMarkers[markerCount] = mMap.addMarker(mOptions);
+                            binMarkers[markerCount].setTag("binMarker");
+                            markerCount++;
+                            addMark = false;
+                        }
+                    });
+                    dlg.show();
                 }
             }
         });
@@ -232,7 +240,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void button1Activity(View view) {
         //버튼 1 입력시 반응
         Toast toast = Toast.makeText(this,"핀을 등록할 곳을 누르시오",Toast.LENGTH_LONG);
-        toast.setGravity(Gravity.TOP , 0, 300);
+        toast.setGravity(Gravity.LEFT , 0, 300);
         toast.show();
 
         addMark = true;
