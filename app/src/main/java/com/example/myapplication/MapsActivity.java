@@ -12,6 +12,7 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Toast;
 
@@ -48,6 +49,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private MarkerOptions markerOptions;
     private Marker currentMarker;
 
+    private Marker[] binMarkers = new Marker[99999];
+
+    private boolean addMark = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -136,6 +140,36 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
         startLocationUpdates();
+
+        //클릭시 핀 추가
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener(){
+            @Override
+            public void onMapClick(LatLng point){
+                MarkerOptions mOptions = new MarkerOptions();
+                //마커 타이틀
+                mOptions.title("마커 좌표");
+                Double latitude = point.latitude; //위도
+                Double longtitude = point.longitude; //경도
+                // 마커의 스니펫(간단 텍스트) 설정
+                mOptions.snippet(latitude.toString() + ", " + longtitude.toString());
+                // LatLng : 위도 경도 쌍 나타내기
+                mOptions.position(new LatLng(latitude, longtitude));
+                // 마커 추가
+                if(addMark) { //등록 버튼을 누르면 addMark가 true가 되어서 등록 가능해진다.
+                    googleMap.addMarker(mOptions);
+                    addMark = false;
+                }
+            }
+        });
+
+        // 마커를 추가하는 곳 공대 5호관 옆에 추가 36.3663, 127.3451
+        LatLng bin1 = new LatLng(36.3663, 127.3451);
+        LatLng bin2 = new LatLng(36.3661, 127.3455);
+        binMarkers[0] = mMap.addMarker(new MarkerOptions().position(bin1).title("Marker1 in 공5"));
+        binMarkers[1] = mMap.addMarker(new MarkerOptions().position(bin2).title("Marker2 in 공5"));
+        //mMap.moveCamera(CameraUpdateFactory.newLatLng(bin)); 카메라 이동
+
+
     }
 
     private void startLocationUpdates() {
@@ -163,14 +197,43 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
-    //버튼 입력에 대한 반응
+    //버튼 입력에 대한 반응 등록
     public void button1Activity(View view) {
         //버튼 1 입력시 반응
-        Toast.makeText(this,"버튼1 입력",Toast.LENGTH_SHORT).show();
+        Toast toast = Toast.makeText(this,"핀을 등록할 곳을 누르시오",Toast.LENGTH_LONG);
+        toast.setGravity(Gravity.TOP , 0, 300);
+        toast.show();
+
+        addMark = true;
+//        mMap = googleMap;
+//
+//        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener(){
+//            @Override
+//            public void onMapClick(LatLng point){
+//                MarkerOptions mOptions = new MarkerOptions();
+//                //마커 타이틀
+//                mOptions.title("마커 좌표");
+//                Double latitude = point.latitude; //위도
+//                Double longtitude = point.longitude; //경도
+//                // 마커의 스니펫(간단 텍스트) 설정
+//                mOptions.snippet(latitude.toString() + ", " + longtitude.toString());
+//                // LatLng : 위도 경도 쌍 나타내기
+//                mOptions.position(new LatLng(latitude, longtitude));
+//                // 마커 추가
+//                googleMap.addMarker(mOptions);
+//            }
+//        });
+
     }
 
     public void button2Activity(View view) {
-        //버튼 2 입력시 반응
-        Toast.makeText(this,"버튼2 입력",Toast.LENGTH_SHORT).show();
+        //버튼 2 입력시 반응 삭제
+        Toast toast = Toast.makeText(this,"삭제할 핀을 누르시오",9999);
+        toast.setGravity(Gravity.TOP, 0, 300);
+        toast.show();
+
+        //binMarker 삭제
+        binMarkers[1].remove();
+
     }
 }
