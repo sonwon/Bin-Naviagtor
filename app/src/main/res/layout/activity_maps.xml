@@ -25,16 +25,20 @@
 
         <!-- 하단바에 필요한 버튼 추가 -->
         <Button
+            android:id="@+id/button1"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="버튼1" />
+            android:text="쓰레기통 등록"
+            android:onClick="button1Activity"/>
 
         <Button
+            android:id="@+id/button2"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="버튼2" />
+            android:text="쓰레기통 삭제"
+            android:onClick="button2Activity"/>
 
 
     </LinearLayout>
