@@ -16,7 +16,10 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.LocationResult;
@@ -173,7 +176,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                Toast.makeText(MapsActivity.this, "marker click", Toast.LENGTH_SHORT).show(); //debug용
+                //Toast.makeText(MapsActivity.this, "marker click", Toast.LENGTH_SHORT).show(); //debug용
                 String str = (String) marker.getTag();
                 switch(str) {
                     case "location":
@@ -267,23 +270,53 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     public void markerClick(Marker marker) {
         AlertDialog.Builder builder = new AlertDialog.Builder(MapsActivity.this);
-        builder.setTitle("쓰레기통")
-                .setMessage(marker.getTitle()) // 원하는 추가 정보를 여기에 추가
-                .setNegativeButton("취소", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        // 취소 버튼 클릭 이벤트 처리
-                        dialog.dismiss();
-                    }
-                })
-                .setNeutralButton("버튼", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        // 버튼 입력시 이벤트
-                        Toast.makeText(MapsActivity.this,"버튼 입력",Toast.LENGTH_SHORT).show();
-                    }
-                })
-        ;
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.marker_layout, null);
+        builder.setView(dialogView);
+
+        Button cancel = dialogView.findViewById(R.id.cancel);
+        Button nav = dialogView.findViewById(R.id.nav);
+        Button full = dialogView.findViewById(R.id.full);
+        Button delete = dialogView.findViewById(R.id.delete);
+
+        TextView titleTextView = dialogView.findViewById(R.id.text2);
+        String markerTitle = marker.getTitle();
+        titleTextView.setText(markerTitle);
+
         AlertDialog dialog = builder.create();
         dialog.show();
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 취소 클릭 이벤트 처리
+                dialog.dismiss();
+            }
+        });
+
+        nav.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 길찾기 클릭 이벤트 처리
+                Toast.makeText(MapsActivity.this, "길찾기", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        full.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 가득참 신고 클릭 이벤트 처리
+                Toast.makeText(MapsActivity.this, "가득참 신고", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 삭제 클릭 이벤트 처리
+                marker.remove();
+                dialog.dismiss();
+            }
+        });
     }
 }
