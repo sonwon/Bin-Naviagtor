@@ -172,10 +172,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             binMarkers[markerCount] = mMap.addMarker(mOptions);
                             binMarkers[markerCount].setTag("binMarker");
                             markerCount++;
-                            addMark = false;
+                        }
+                    });
+                    dlg.setNegativeButton("취소", new DialogInterface.OnClickListener(){
+                        public void onClick(DialogInterface dialog, int which){
                         }
                     });
                     dlg.show();
+                    addMark = false;
                 }
             }
         });
@@ -244,36 +248,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         toast.show();
 
         addMark = true;
-//        mMap = googleMap;
-//
-//        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener(){
-//            @Override
-//            public void onMapClick(LatLng point){
-//                MarkerOptions mOptions = new MarkerOptions();
-//                //마커 타이틀
-//                mOptions.title("마커 좌표");
-//                Double latitude = point.latitude; //위도
-//                Double longtitude = point.longitude; //경도
-//                // 마커의 스니펫(간단 텍스트) 설정
-//                mOptions.snippet(latitude.toString() + ", " + longtitude.toString());
-//                // LatLng : 위도 경도 쌍 나타내기
-//                mOptions.position(new LatLng(latitude, longtitude));
-//                // 마커 추가
-//                googleMap.addMarker(mOptions);
-//            }
-//        });
-
-    }
-
-    public void button2Activity(View view) {
-        //버튼 2 입력시 반응 삭제
-        Toast toast = Toast.makeText(this,"삭제할 핀을 누르시오",9999);
-        toast.setGravity(Gravity.TOP, 0, 300);
-        toast.show();
-
-        //binMarker 삭제
-        binMarkers[1].remove();
-
     }
 
     public void markerClick(Marker marker) {
@@ -322,7 +296,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onClick(View v) {
                 // 삭제 클릭 이벤트 처리
-                marker.remove();
+                AlertDialog.Builder dlg = new AlertDialog.Builder(MapsActivity.this);
+                dlg.setTitle("확인 메시지");
+                dlg.setMessage("삭제 하시겠습니까?");
+                dlg.setPositiveButton("확인", new DialogInterface.OnClickListener(){
+                    public void onClick(DialogInterface dialog, int which){
+                        marker.remove();
+                    }
+                });
+                dlg.setNegativeButton("취소", new DialogInterface.OnClickListener(){
+                    public void onClick(DialogInterface dialog, int which){
+
+                    }
+                });
+                dlg.show();
                 dialog.dismiss();
             }
         });
