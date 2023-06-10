@@ -317,14 +317,26 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onClick(View v) {
                 // 가득참 신고 클릭 이벤트 처리
-                if(marker.getTag().equals("binMarker")) {
-                    marker.setIcon(BitmapDescriptorFactory.fromBitmap(trashcan_red));
-                    marker.setTag("fullBin");
-                }
-                else if(marker.getTag().equals("fullBin")) {
-                    marker.setIcon(BitmapDescriptorFactory.fromBitmap(trashcan_black));
-                    marker.setTag("binMarker");
-                }
+                AlertDialog.Builder dlg = new AlertDialog.Builder(MapsActivity.this);
+                dlg.setTitle("확인 메시지");
+                dlg.setMessage("신고 하시겠습니까?");
+                dlg.setPositiveButton("확인", new DialogInterface.OnClickListener(){
+                    public void onClick(DialogInterface dialog, int which){
+                        if(marker.getTag().equals("binMarker")) {
+                            marker.setIcon(BitmapDescriptorFactory.fromBitmap(trashcan_red));
+                            marker.setTag("fullBin");
+                        }
+                        else if(marker.getTag().equals("fullBin")) {
+                            marker.setIcon(BitmapDescriptorFactory.fromBitmap(trashcan_black));
+                            marker.setTag("binMarker");
+                        }
+                    }
+                });
+                dlg.setNegativeButton("취소", new DialogInterface.OnClickListener(){
+                    public void onClick(DialogInterface dialog, int which){
+                    }
+                });
+                dlg.show();
                 dialog.dismiss();
             }
         });
