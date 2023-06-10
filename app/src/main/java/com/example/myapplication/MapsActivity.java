@@ -1,8 +1,6 @@
 package com.example.myapplication;
 
-import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
@@ -12,6 +10,9 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
@@ -39,7 +40,7 @@ import com.example.myapplication.databinding.ActivityMapsBinding;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
+
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
@@ -56,6 +57,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private Marker[] binMarkers = new Marker[99999];
     int markerCount = 0;
+
+    private Bitmap trashcan_black;
+    private Bitmap trashcan_red;
+
 
     private boolean addMark = false;
 
@@ -148,7 +153,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
         startLocationUpdates();
-
+        //검은색 쓰레기통 이미지 생성
+        trashcan_black = imageResize(BitmapFactory.decodeResource(getResources(), R.drawable.trashcan_black));
+        trashcan_red = imageResize(BitmapFactory.decodeResource(getResources(), R.drawable.trashcan_red));
         //클릭시 핀 추가
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener(){
             @Override
@@ -162,6 +169,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 mOptions.snippet(latitude.toString() + ", " + longtitude.toString());
                 // LatLng : 위도 경도 쌍 나타내기
                 mOptions.position(new LatLng(latitude, longtitude));
+                // 마커의 이미지 변경
+                mOptions.icon(BitmapDescriptorFactory.fromBitmap(trashcan_black));
                 // 마커 추가
                 if(addMark) { //등록 버튼을 누르면 addMark가 true가 되어서 등록 가능해진다.
                     AlertDialog.Builder dlg = new AlertDialog.Builder(MapsActivity.this);
@@ -194,6 +203,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     case "location":
                         break;
                     case "binMarker":
+                    case "fullBin":
                         markerClick(marker);
                         break;
                 }
@@ -204,10 +214,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // 마커를 추가하는 곳 공대 5호관 옆에 추가 36.3663, 127.3451
         LatLng bin1 = new LatLng(36.3663, 127.3451);
         LatLng bin2 = new LatLng(36.3661, 127.3455);
-        binMarkers[0] = mMap.addMarker(new MarkerOptions().position(bin1).title("Marker1 in 공5"));
+        binMarkers[0] = mMap.addMarker(new MarkerOptions().position(bin1).title("Marker1 in 공5").icon(BitmapDescriptorFactory.fromBitmap(trashcan_black)));
         binMarkers[0].setTag("binMarker");
         markerCount++;
-        binMarkers[1] = mMap.addMarker(new MarkerOptions().position(bin2).title("Marker2 in 공5"));
+        binMarkers[1] = mMap.addMarker(new MarkerOptions().position(bin2).title("Marker2 in 공5").icon(BitmapDescriptorFactory.fromBitmap(trashcan_black)));
         binMarkers[1].setTag("binMarker");
         markerCount++;
         //mMap.moveCamera(CameraUpdateFactory.newLatLng(bin)); 카메라 이동
@@ -239,6 +249,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         fusedLocationClient.removeLocationUpdates(locationCallback);
     }
 
+    public Bitmap imageResize(Bitmap originalBitmap) { //이미지 크기 resize를 위한 코드
+        int width = originalBitmap.getWidth(); // 현재 이미지의 너비
+        int height = originalBitmap.getHeight(); // 현재 이미지의 높이
+
+        int newWidth = 80; // 원하는 마커 이미지의 너비
+        int newHeight = 50; // 원하는 마커 이미지의 높이
+
+        float scaleWidth = ((float) newWidth) / width;
+        float scaleHeight = ((float) newHeight) / height;
+
+        Matrix matrix = new Matrix();
+        matrix.postScale(scaleWidth, scaleHeight);
+
+        Bitmap resizedBitmap = Bitmap.createBitmap(originalBitmap, 0, 0, width, height, matrix, false);
+        return resizedBitmap;
+    }
+
 
     //버튼 입력에 대한 반응 등록
     public void button1Activity(View view) {
@@ -265,6 +292,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         String markerTitle = marker.getTitle();
         titleTextView.setText(markerTitle);
 
+        full.setText(marker.getTag().equals("binMarker") ? "가득참 신고" : "비움 신고");
+
         AlertDialog dialog = builder.create();
         dialog.show();
 
@@ -288,7 +317,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onClick(View v) {
                 // 가득참 신고 클릭 이벤트 처리
-                Toast.makeText(MapsActivity.this, "가득참 신고", Toast.LENGTH_SHORT).show();
+                if(marker.getTag().equals("binMarker")) {
+                    marker.setIcon(BitmapDescriptorFactory.fromBitmap(trashcan_red));
+                    marker.setTag("fullBin");
+                }
+                else if(marker.getTag().equals("fullBin")) {
+                    marker.setIcon(BitmapDescriptorFactory.fromBitmap(trashcan_black));
+                    marker.setTag("binMarker");
+                }
+                dialog.dismiss();
             }
         });
 
