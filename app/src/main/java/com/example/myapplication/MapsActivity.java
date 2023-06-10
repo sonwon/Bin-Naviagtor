@@ -276,6 +276,78 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         addMark = true;
     }
+    private boolean isEnglish = false; //언어설정 true이면 영어 false이면 한국어
+    public void button2Activity(View view) {
+        //버튼 1 입력시 반응
+        AlertDialog.Builder builder = new AlertDialog.Builder(MapsActivity.this);
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.recycle_menu, null);
+        builder.setView(dialogView);
+
+        Button plastic = dialogView.findViewById(R.id.plastic);
+        Button glass = dialogView.findViewById(R.id.glass);
+        Button can = dialogView.findViewById(R.id.can);
+        Button paper = dialogView.findViewById(R.id.paper);
+        Button changeLanguage = dialogView.findViewById(R.id.changeLanguage);
+
+        if(isEnglish) {
+            plastic.setText("Plastic");
+            glass.setText("Glass");
+            can.setText("Can");
+            paper.setText("Paper");
+            changeLanguage.setText("한국어로 변경");
+        }
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+        changeLanguage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                isEnglish = isEnglish ? false : true;
+                dialog.dismiss();
+            }
+        });
+    }
+
+
+    public void recycleActivity(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MapsActivity.this);
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.show_tips, null);
+        builder.setView(dialogView);
+
+        Button goBack = dialogView.findViewById(R.id.goBack);
+
+        TextView tips = dialogView.findViewById(R.id.tips);
+        int viewId = view.getId();
+
+        switch (viewId) { //TODO 분리수거 팁 설명 코드 -> 추후에 String을 txt파일로 변경
+            case R.id.plastic:
+                tips.setText(isEnglish ? "explain plastic tips" : "플라스틱 분리수거 팁 설명");
+                break;
+            case R.id.glass:
+                tips.setText(isEnglish ? "explain glass tips" : "유리 분리수거 팁 설명");
+                break;
+            case R.id.can:
+                tips.setText(isEnglish ? "explain can tips" : "캔 분리수거 팁 설명");
+                break;
+            case R.id.paper:
+                tips.setText(isEnglish ? "explain paper tips" : "종이 분리수거 팁 설명");
+                break;
+            default:
+                break;
+        }
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+        goBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+    }
 
     public void markerClick(Marker marker) {
         AlertDialog.Builder builder = new AlertDialog.Builder(MapsActivity.this);

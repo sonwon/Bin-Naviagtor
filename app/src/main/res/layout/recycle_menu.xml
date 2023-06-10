@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/plastic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="플라스틱"
+            android:onClick="recycleActivity"
+            />
+
+        <Button
+            android:id="@+id/glass"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="유리"
+            android:onClick="recycleActivity"
+            />
+
+        <Button
+            android:id="@+id/can"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="캔"
+            android:onClick="recycleActivity"
+            />
+
+        <Button
+            android:id="@+id/paper"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="종이"
+            android:onClick="recycleActivity"
+            />
+
+    </LinearLayout>
+
+
+    <Button
+        android:id="@+id/changeLanguage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="Change English"
+        />
+
+
+</RelativeLayout>
