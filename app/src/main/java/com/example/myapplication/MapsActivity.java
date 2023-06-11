@@ -356,7 +356,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         builder.setView(dialogView);
 
         Button cancel = dialogView.findViewById(R.id.cancel);
-        Button nav = dialogView.findViewById(R.id.nav);
         Button full = dialogView.findViewById(R.id.full);
         Button delete = dialogView.findViewById(R.id.delete);
 
@@ -377,13 +376,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
 
-        nav.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // 길찾기 클릭 이벤트 처리
-                Toast.makeText(MapsActivity.this, "길찾기", Toast.LENGTH_SHORT).show();
-            }
-        });
 
         full.setOnClickListener(new View.OnClickListener() {
             @Override
