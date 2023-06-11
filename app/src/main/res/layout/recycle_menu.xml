@@ -13,9 +13,8 @@
             android:id="@+id/plastic"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="플라스틱"
             android:onClick="recycleActivity"
-            />
+            android:text="플라스틱" />
 
         <Button
             android:id="@+id/glass"
@@ -43,14 +42,24 @@
 
     </LinearLayout>
 
-
     <Button
         android:id="@+id/changeLanguage"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:text="Change English"
-        />
+        android:layout_marginBottom="-3dp"
+        android:text="Change English" />
+
+    <Button
+        android:id="@+id/cancelRecycle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="2dp"
+        android:layout_marginBottom="-3dp"
+        android:text="닫기" />
+
 
 
 </RelativeLayout>

@@ -253,8 +253,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         int width = originalBitmap.getWidth(); // 현재 이미지의 너비
         int height = originalBitmap.getHeight(); // 현재 이미지의 높이
 
-        int newWidth = 80; // 원하는 마커 이미지의 너비
-        int newHeight = 50; // 원하는 마커 이미지의 높이
+        int newWidth = 100; // 원하는 마커 이미지의 너비
+        int newHeight = 80; // 원하는 마커 이미지의 높이
 
         float scaleWidth = ((float) newWidth) / width;
         float scaleHeight = ((float) newHeight) / height;
@@ -289,6 +289,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Button can = dialogView.findViewById(R.id.can);
         Button paper = dialogView.findViewById(R.id.paper);
         Button changeLanguage = dialogView.findViewById(R.id.changeLanguage);
+        Button cancel = dialogView.findViewById(R.id.cancelRecycle);
 
         if(isEnglish) {
             plastic.setText("Plastic");
@@ -296,6 +297,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             can.setText("Can");
             paper.setText("Paper");
             changeLanguage.setText("한국어로 변경");
+            cancel.setText("Close");
         }
 
         AlertDialog dialog = builder.create();
@@ -305,6 +307,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onClick(View view) {
                 isEnglish = isEnglish ? false : true;
+                dialog.dismiss();
+                button2Activity(view);
+            }
+        });
+
+        cancel.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
                 dialog.dismiss();
             }
         });
@@ -321,7 +331,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         TextView tips = dialogView.findViewById(R.id.tips);
         int viewId = view.getId();
-
+        if(isEnglish){
+            goBack.setText("Go Back");
+        }
         switch (viewId) { //TODO 분리수거 팁 설명 코드 -> 추후에 String을 txt파일로 변경
             case R.id.plastic:
                 tips.setText(isEnglish ? "explain plastic tips" : "플라스틱 분리수거 팁 설명");
