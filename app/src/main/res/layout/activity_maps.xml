@@ -6,6 +6,9 @@
     android:layout_height="match_parent">
 
     <!-- 맵 프래그먼트 -->
+
+    <!-- 하단바 -->
+
     <fragment
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
@@ -14,32 +17,44 @@
         tools:context=".MapsActivity"
         tools:layout="@layout/support_simple_spinner_dropdown_item" />
 
-    <!-- 하단바 -->
-    <LinearLayout
+    <Button
+        android:id="@+id/recycle_exlaination"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="-6dp"
-        android:background="@android:color/white"
-        android:orientation="horizontal">
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginBottom="10dp"
+        android:layout_weight="1"
+        android:backgroundTint="#673AB7"
+        android:onClick="button2Activity"
+        android:text="분리수거 설명 보기"
+        map:cornerRadius="30dp" />
 
-        <!-- 하단바에 필요한 버튼 추가 -->
-        <Button
-            android:id="@+id/button1"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="10"
-            android:text="쓰레기통 등록"
-            android:onClick="button1Activity"/>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/add_bin_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/recycle_exlaination"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="false"
+        android:layout_marginRight="40dp"
+        android:layout_marginBottom="30dp"
+        android:clickable="true"
+        map:backgroundTint="#8BC34A"
+        map:srcCompat="@android:drawable/ic_input_add" />
 
-        <Button
-            android:id="@+id/button2"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="분리수거 팁"
-            android:onClick="button2Activity"/>
-
-    </LinearLayout>
+    <TextView
+        android:id="@+id/state_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:background="#606060"
+        android:text="상태 설명 창"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="#FFFFFF"
+        android:visibility="invisible" />
 
 </RelativeLayout>

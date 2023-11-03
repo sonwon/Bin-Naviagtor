@@ -1,4 +1,4 @@
-<!-- dialog_custom.xml -->
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -7,54 +7,54 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/marker_title"
+        android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical|center_horizontal"
         android:layout_marginTop="10dp"
-        android:gravity="center"
-        android:text="쓰레기통 정보"
-        android:textColor="@color/black"
+        android:text="쓰레기통 정보 입력"
+        android:textAlignment="center"
+        android:textColor="#000000"
         android:textSize="30dp" />
 
     <View
-        android:id="@+id/divider"
+        android:id="@+id/divider4"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="?android:attr/listDivider" />
 
     <ImageView
-        android:id="@+id/marker_image"
+        android:id="@+id/add_image"
         android:layout_width="match_parent"
         android:layout_height="220dp"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
         android:layout_marginRight="10dp"
-        app:srcCompat="@drawable/common_google_signin_btn_icon_light_normal_background" />
+        android:clickable="true"
+        android:src="@drawable/add_image" />
 
     <View
-        android:id="@+id/divider2"
+        android:id="@+id/divider5"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="?android:attr/listDivider" />
 
-    <TextView
-        android:id="@+id/marker_information"
+    <EditText
+        android:id="@+id/add_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/marker_title"
-        android:layout_gravity="center_vertical|center_horizontal"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="30dp"
         android:layout_marginRight="10dp"
         android:layout_marginBottom="30dp"
         android:background="#FFFFFF"
-        android:gravity="center"
-        android:textColor="@color/black"
+        android:backgroundTint="#FFFFFF"
+        android:ems="10"
+        android:hint="쓰레기통 위치 정보 입력"
+        android:inputType="text"
         android:textSize="20dp" />
 
     <View
-        android:id="@+id/divider3"
+        android:id="@+id/divider6"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="?android:attr/listDivider" />
@@ -66,42 +66,25 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/full"
-            android:layout_width="wrap_content"
+            android:id="@+id/add_submit"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="5dp"
+            android:layout_marginBottom="10dp"
             android:layout_weight="1"
             android:backgroundTint="#4CAF50"
-            android:text="가득참 신고" />
+            android:text="저장" />
 
         <Button
-            android:id="@+id/delete"
-            android:layout_width="wrap_content"
+            android:id="@+id/add_cancel"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="10dp"
-            android:layout_weight="1"
-            android:backgroundTint="#8BC34A"
-            android:text="삭제"
-            android:textColor="@color/red" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/cancel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
             android:layout_weight="1"
-            android:backgroundTint="#888888"
+            android:backgroundTint="#8BC34A"
             android:text="취소" />
     </LinearLayout>
 
